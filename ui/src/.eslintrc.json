@@ -1,0 +1,45 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "import/no-extraneous-dependencies": [2, {
+      "devDependencies": true
+    }],
+    "import/no-named-as-default": [0],
+    "jsx-a11y/anchor-is-valid": [0],
+    "react/jsx-curly-spacing": [2, "always", {
+      "spacing": { "objectLiterals": "never" },
+      "allowMultiline": true
+    }],
+    "react/jsx-filename-extension": [0],
+    "react/prop-types": [0],
+    "jsx-a11y/label-has-for": [0],
+    "no-restricted-globals": [0],
+    "react/jsx-uses-react": "error",
+    "max-len": [1, 120, 2, {"ignoreComments": true}],
+    "react/react-in-jsx-scope": [0]
+  },
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "globals": {
+    "window": true,
+    "document": true,
+    "describe": true,
+    "it": true,
+    "expect": true,
+    "beforeEach": true,
+    "afterEach": true,
+    "jest": true,
+    "spyOn": true,
+    "cy": true,
+    "Cypress": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  }
+}
