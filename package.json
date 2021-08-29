@@ -1,0 +1,27 @@
+{
+  "name": "shopping-list",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dc:up": "docker-compose -f ./devops/docker-compose.yml up",
+    "dc:build": "docker-compose -f ./devops/docker-compose.yml up --build",
+    "dc:down": "docker-compose -f ./devops/docker-compose.yml down",
+    "mysql:shell": "docker exec -it $(docker container ls | grep mysql | awk '{ print $1 }') bash",
+    "start": "concurrently --kill-others 'yarn dc:up' 'cd api && yarn start' 'cd ui && yarn start'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seth-riedel/shopping-list.git"
+  },
+  "author": "Seth Riedel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seth-riedel/shopping-list/issues"
+  },
+  "homepage": "https://github.com/seth-riedel/shopping-list#readme",
+  "devDependencies": {
+    "concurrently": "^6.2.1"
+  }
+}
