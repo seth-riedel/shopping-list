@@ -29,14 +29,18 @@ export const listSlice = createSlice({
     toggleAddItemDrawer(state) {
       state.addItemOpen = !state.addItemOpen;
     },
+    setListData(state, action) {
+      state.data = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchListData.pending, (state) => {
         state.isFetching = true;
       })
-      .addCase(fetchListData.fulfilled, (state) => {
+      .addCase(fetchListData.fulfilled, (state, action) => {
         state.isFetching = false;
+        state.data = action.payload;
       })
       .addCase(fetchListData.rejected, (state) => {
         state.isFetching = false;
@@ -48,6 +52,7 @@ export const listSlice = createSlice({
 export const {
   clearError,
   toggleAddItemDrawer,
+  setListData,
 } = listSlice.actions;
 
 export default listSlice.reducer;

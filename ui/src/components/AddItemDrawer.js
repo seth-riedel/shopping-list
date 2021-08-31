@@ -122,6 +122,7 @@ export const AddItemDrawer = (props) => {
   );
 };
 
+// @TODO: should be using selectors here
 const mapStateToProps = (state) => ({
   addItemOpen: state.list.addItemOpen,
   error: state.addItem.error,

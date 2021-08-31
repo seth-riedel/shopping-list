@@ -4,7 +4,7 @@ import {
 } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { apiBase } from '../env';
-import { toggleAddItemDrawer } from './listSlice';
+import { toggleAddItemDrawer, setListData } from './listSlice';
 
 const initialState = {
   isSaving: false,
@@ -17,6 +17,7 @@ export const saveItem = createAsyncThunk(
   async (params, { dispatch }) => {
     const response = await axios.post(`${apiBase}/item`, params);
     dispatch(toggleAddItemDrawer());
+    dispatch(setListData(response.data));
     return response.data;
   },
 );

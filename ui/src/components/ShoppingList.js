@@ -8,6 +8,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import BackdropSpinner from './BackdropSpinner';
 import AddItemDrawer from './AddItemDrawer';
+import ShoppingListItems from './ShoppingListItems';
 import {
   fetchListData,
   clearError,
@@ -17,7 +18,7 @@ import {
 export const ShoppingList = (props) => {
   const {
     isFetching,
-    // data: listData,
+    data: listData,
     dispatchClearError,
     error,
     dispatchFetchListData,
@@ -31,7 +32,7 @@ export const ShoppingList = (props) => {
   return (
     <Box my={ 4 }>
       <BackdropSpinner visible={ isFetching } />
-      <Grid container spacing={ 3 }>
+      <Grid container>
         <Grid item xs={ 8 }>
           <Typography variant="h6">
             Your Items
@@ -40,11 +41,14 @@ export const ShoppingList = (props) => {
         <Grid item xs={ 4 }>
           <Box textAlign="right">
             <Button variant="contained" color="primary" onClick={ dispatchToggleAddItemDrawer }>
-              + Add Item
+              Add Item
             </Button>
           </Box>
         </Grid>
       </Grid>
+      <Box mt={ 4 }>
+        <ShoppingListItems data={ listData } />
+      </Box>
       <AddItemDrawer />
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
@@ -58,6 +62,7 @@ export const ShoppingList = (props) => {
   );
 };
 
+// @TODO: should be using selectors here
 const mapStateToProps = (state) => ({
   data: state.list.data,
   isFetching: state.list.isFetching,

@@ -8,6 +8,10 @@ const updateableFields = ['name', 'notes', 'quantity', 'completed'];
 // @TODO: this should come from a secure place
 const userId = 1;
 
+const getItems = async () => (
+  db.query('SELECT id, name, notes, quantity, completed FROM items WHERE user_id = ?', [userId])
+);
+
 const upsertItem = async (req, res) => {
   const itemData = req.body;
   const acceptableFields = Object.keys(itemData)
@@ -33,13 +37,14 @@ const upsertItem = async (req, res) => {
     );
   }
 
-  res.end();
+  const items = await getItems();
+  res.json(items);
 };
 
 router.post('/item', upsertItem);
 
 router.get('/item', async (req, res) => {
-  const results = await db.query('SELECT id, name, notes, quantity, completed FROM items WHERE user_id = ?', [userId]);
+  const results = await getItems();
   res.send(results);
 });
 
