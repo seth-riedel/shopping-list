@@ -24,6 +24,15 @@ const pool = mysql.createPool({
   password: connectionConfig.password,
   database: connectionConfig.database,
   multipleStatements: true,
+  // function for casting BIT fields to booleans. this is usually automatic in other databases...
+  typeCast: (field, useDefaultTypeCasting) => {
+    if (field.type === 'BIT' && field.length === 1) {
+      const bytes = field.buffer();
+      return bytes[0] === 1;
+    }
+
+    return useDefaultTypeCasting();
+  },
 });
 
 const db = {

@@ -11,3 +11,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* there should be a better way to do this */
+.MuiDrawer-paper {
+  width: 30% !important;
+}
+  
+@media (max-width: 1200px) {
+  .MuiDrawer-paper {
+    width: 100% !important;
+  }
+}
