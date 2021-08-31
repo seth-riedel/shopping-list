@@ -19,6 +19,14 @@ export const fetchListData = createAsyncThunk(
   },
 );
 
+export const completeItem = createAsyncThunk(
+  'list/completeItem',
+  async (payload) => {
+    await axios.post(`${apiBase}/item/complete`, payload);
+    return true;
+  },
+);
+
 export const listSlice = createSlice({
   name: 'list',
   initialState,
@@ -45,6 +53,51 @@ export const listSlice = createSlice({
       .addCase(fetchListData.rejected, (state) => {
         state.isFetching = false;
         state.error = 'Sorry, something went wrong. It\'s not you, it\'s us.';
+      });
+
+    builder
+      .addCase(completeItem.pending, (state, action) => {
+        // set fetching status on this specific item on state
+        const idToComplete = action.meta.arg.id;
+        state.data = state.data.map((item) => {
+          if (item.id === idToComplete) {
+            return {
+              ...item,
+              isCompleting: true,
+            };
+          }
+
+          return item;
+        });
+      })
+      .addCase(completeItem.fulfilled, (state, action) => {
+        // reset fetching status on this specific item on state
+        const idToComplete = action.meta.arg.id;
+        state.data = state.data.map((item) => {
+          if (item.id === idToComplete) {
+            return {
+              ...item,
+              completed: action.meta.arg.completed,
+              isCompleting: false,
+            };
+          }
+
+          return item;
+        });
+      })
+      .addCase(completeItem.rejected, (state, action) => {
+        // reset fetching status on this specific item on state
+        const idToComplete = action.meta.arg.id;
+        state.data = state.data.map((item) => {
+          if (item.id === idToComplete) {
+            return {
+              ...item,
+              isCompleting: false,
+            };
+          }
+
+          return item;
+        });
       });
   },
 });

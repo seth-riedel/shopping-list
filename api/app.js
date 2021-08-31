@@ -19,20 +19,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  next(createError(404));
-});
-
 // error handler
-app.use((err, req, res) => {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.end();
-});
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  if (err.message === 'Validation failed') {
+    err.status = 400;
+  }
+  res.status(err.status || 500).end()
+})
 
 module.exports = app;

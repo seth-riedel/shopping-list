@@ -43,7 +43,7 @@ export const AddItemDrawer = (props) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!formIsValid(formValues)) {
-      return dispatchSetError('Please fill out all required fields.');
+      return dispatchSetError('Quantity must be between 1 and 99');
     }
 
     dispatchSaveItem(formValues);

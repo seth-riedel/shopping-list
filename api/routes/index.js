@@ -1,9 +1,10 @@
 const express = require('express');
+const { celebrate, Joi, errors, Segments } = require('celebrate');
 const db = require('../lib/db');
 
 const router = express.Router();
 
-const updateableFields = ['name', 'notes', 'quantity', 'completed'];
+const updateableFields = ['name', 'notes', 'quantity'];
 
 // @TODO: this should come from a secure place
 const userId = 1;
@@ -41,11 +42,37 @@ const upsertItem = async (req, res) => {
   res.json(items);
 };
 
-router.post('/item', upsertItem);
+router.post(
+  '/item', 
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      id: Joi.number().optional().min(1).allow(null),
+      name: Joi.string().required(),
+      notes: Joi.string().optional().allow(null, ''),
+      quantity: Joi.number().optional().min(1).max(99).default(1),
+    }),
+  }),
+  upsertItem,
+);
 
 router.get('/item', async (req, res) => {
   const results = await getItems();
   res.send(results);
 });
+
+router.post(
+  '/item/complete', 
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      id: Joi.number().required().min(1),
+      complete: Joi.boolean().required(),
+    }),
+  }),
+  async (req, res) => {
+    const { id, complete } = req.body;
+    await db.query('UPDATE items SET completed = ? WHERE id = ? AND user_id = ?', [complete, id, userId]);
+    res.end();
+  },
+);
 
 module.exports = router;
