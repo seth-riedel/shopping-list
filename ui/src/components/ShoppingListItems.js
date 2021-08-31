@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 export const ShoppingListItems = ({ data }) => {
   const classes = useStyles();
   if (!data || !data.length) {
-    return <box textAlign="middle">Nothing here yet!</box>;
+    return <Box textAlign="middle">Nothing here yet!</Box>;
   }
 
   return (

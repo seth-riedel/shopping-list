@@ -11,6 +11,10 @@
     "mysql:shell": "docker exec -it $(docker container ls | grep mysql | awk '{ print $1 }') bash",
     "start": "concurrently --kill-others 'yarn dc:up' 'cd api && yarn start' 'cd ui && yarn start'"
   },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/seth-riedel/shopping-list.git"
