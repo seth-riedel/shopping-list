@@ -77,7 +77,7 @@ export const listSlice = createSlice({
           if (item.id === idToComplete) {
             return {
               ...item,
-              completed: action.meta.arg.completed,
+              completed: action.meta.arg.complete,
               isCompleting: false,
             };
           }

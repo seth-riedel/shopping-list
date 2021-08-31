@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     color: theme.palette.text.secondary,
   },
+  strikethrough: {
+    textDecoration: 'line-through',
+  },
 }));
 
 export const ShoppingListItems = ({ data, dispatchCompleteItem }) => {
@@ -51,7 +54,7 @@ export const ShoppingListItems = ({ data, dispatchCompleteItem }) => {
                     )
                   }
                 </Grid>
-                <Grid item xs={ 10 }>
+                <Grid item xs={ 10 } className={ (item.completed) ? classes.strikethrough : '' }>
                   <Box>{ item.name }</Box>
                   { item.notes && <Box>{ item.notes }</Box> }
                 </Grid>
