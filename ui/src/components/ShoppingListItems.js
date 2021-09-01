@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import omit from 'lodash/omit';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -21,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
   },
   strikethrough: {
     textDecoration: 'line-through',
+  },
+  verticalAlignMiddle: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
 }));
 
@@ -43,8 +48,8 @@ export const ShoppingListItems = (props) => {
         data.map((item) => (
           <Box key={ item.id } mb={ 2 }>
             <Paper className={ classes.paper }>
-              <Grid container spacing={ 3 }>
-                <Grid item xs>
+              <Box display="flex" bgcolor="background.paper">
+                <Box>
                   <FormControlLabel
                     control={ (
                       <Checkbox
@@ -57,23 +62,36 @@ export const ShoppingListItems = (props) => {
                       />
                     ) }
                   />
-                </Grid>
-                <Grid item xs={ 10 } className={ (item.completed) ? classes.strikethrough : '' }>
-                  <Box fontWeight="fontWeightBold">{ item.name }</Box>
-                  { item.notes && <Box>{ item.notes }</Box> }
-                </Grid>
-                <Grid item xs>
-                  <Box textAlign="right">
+                </Box>
+                <Box flexGrow={ 1 }>
+                  <Box className={ classes.verticalAlignMiddle }>
+                    <Box fontWeight="fontWeightBold">{ item.name }</Box>
+                    { item.notes && <Box>{ item.notes }</Box> }
+                  </Box>
+                </Box>
+                <Box textAlign="right" mr={ 2 }>
+                  <Box className={ classes.verticalAlignMiddle }>
+                    qty
+                    { ' ' }
+                    { item.quantity }
+                  </Box>
+                </Box>
+                <Box textAlign="right" mr={ 1 } ml={ 1 }>
+                  <Box className={ classes.verticalAlignMiddle }>
                     <CreateOutlinedIcon
                       onClick={ () => {
                         dispatchSetFormValues(omit(item, 'isCompleting'));
                         dispatchToggleAddItemDrawer();
                       } }
                     />
+                  </Box>
+                </Box>
+                <Box textAlign="right" mr={ 1 } ml={ 1 }>
+                  <Box className={ classes.verticalAlignMiddle }>
                     <DeleteOutlineIcon />
                   </Box>
-                </Grid>
-              </Grid>
+                </Box>
+              </Box>
             </Paper>
           </Box>
         ))
