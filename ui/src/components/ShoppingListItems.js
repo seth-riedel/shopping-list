@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.primary,
   },
   strikethrough: {
     textDecoration: 'line-through',
@@ -59,7 +59,7 @@ export const ShoppingListItems = (props) => {
                   />
                 </Grid>
                 <Grid item xs={ 10 } className={ (item.completed) ? classes.strikethrough : '' }>
-                  <Box>{ item.name }</Box>
+                  <Box fontWeight="fontWeightBold">{ item.name }</Box>
                   { item.notes && <Box>{ item.notes }</Box> }
                 </Grid>
                 <Grid item xs>
