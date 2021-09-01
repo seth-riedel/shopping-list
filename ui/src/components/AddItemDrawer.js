@@ -56,7 +56,7 @@ export const AddItemDrawer = (props) => {
       onClose={ () => dispatchToggleAddItemDrawer() }
     >
       <form onSubmit={ handleSubmit }>
-        <Box m={ 4 }>
+        <Box m={ 2 }>
           <Typography variant="h6">
             Add an Item
           </Typography>
