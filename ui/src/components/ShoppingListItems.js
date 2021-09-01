@@ -1,13 +1,20 @@
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import omit from 'lodash/omit';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import { completeItem, toggleAddItemDrawer } from '../state/listSlice';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogActions from '@material-ui/core/DialogActions';
+import { completeItem, deleteItem, toggleAddItemDrawer } from '../state/listSlice';
 import { setFormValues } from '../state/addItemSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -33,10 +40,15 @@ export const ShoppingListItems = (props) => {
   const {
     data,
     dispatchCompleteItem,
+    dispatchDeleteItem,
     dispatchSetFormValues,
     dispatchToggleAddItemDrawer,
   } = props;
   const classes = useStyles();
+
+  const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const handleCloseDialog = () => setShowDeleteConfirmationDialog(false);
 
   if (!data || !data.length) {
     return <Box textAlign="middle">Nothing here yet!</Box>;
@@ -88,7 +100,12 @@ export const ShoppingListItems = (props) => {
                 </Box>
                 <Box textAlign="right" mr={ 1 } ml={ 1 }>
                   <Box className={ classes.verticalAlignMiddle }>
-                    <DeleteOutlineIcon />
+                    <DeleteOutlineIcon
+                      onClick={ () => {
+                        setItemToDelete(item.id);
+                        setShowDeleteConfirmationDialog(true);
+                      } }
+                    />
                   </Box>
                 </Box>
               </Box>
@@ -96,6 +113,28 @@ export const ShoppingListItems = (props) => {
           </Box>
         ))
       }
+      <Dialog onClose={ handleCloseDialog } aria-labelledby="simple-dialog-title" open={ showDeleteConfirmationDialog }>
+        <DialogTitle id="simple-dialog-title">Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you wish to delete this item?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={ () => {
+              dispatchDeleteItem({ id: itemToDelete });
+              handleCloseDialog();
+            } }
+            color="secondary"
+          >
+            Delete
+          </Button>
+          <Button onClick={ handleCloseDialog } color="primary" autoFocus>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
@@ -104,6 +143,7 @@ const mapStateToProps = null;
 
 const mapDispatchToProps = (dispatch) => ({
   dispatchCompleteItem: (payload) => dispatch(completeItem(payload)),
+  dispatchDeleteItem: (payload) => dispatch(deleteItem(payload)),
   dispatchSetFormValues: (payload) => dispatch(setFormValues(payload)),
   dispatchToggleAddItemDrawer: () => dispatch(toggleAddItemDrawer()),
 });

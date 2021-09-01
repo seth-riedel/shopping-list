@@ -39,7 +39,11 @@ const upsertItem = async (req, res) => {
   }
 
   const items = await getItems();
-  res.json(items);
+
+  // timeout added so UI behavior can be observed
+  setTimeout(() => {
+    res.json(items);
+  }, 1000);
 };
 
 router.post(
@@ -73,7 +77,30 @@ router.post(
   async (req, res) => {
     const { id, complete } = req.body;
     await db.query('UPDATE items SET completed = ? WHERE id = ? AND user_id = ?', [complete, id, userId]);
-    res.end();
+
+    // timeout added so UI behavior can be observed
+    setTimeout(() => {
+      res.end();
+    }, 1000);
+  },
+);
+
+router.delete(
+  '/item/:id',
+  celebrate({
+    [Segments.PARAMS]: Joi.object().keys({
+      id: Joi.number().required().min(1),
+    }),
+  }),
+  async (req, res) => {
+    const { id } = req.params;
+    await db.query('DELETE FROM items WHERE id = ? AND user_id = ?', [id, userId]);
+    const results = await getItems();
+
+    // timeout added so UI behavior can be observed
+    setTimeout(() => {
+      res.send(results);
+    }, 1000);
   },
 );
 

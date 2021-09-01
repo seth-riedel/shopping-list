@@ -1,5 +1,13 @@
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Backdrop from '@material-ui/core/Backdrop';
+import BackdropMui from '@material-ui/core/Backdrop';
+import { withStyles } from '@material-ui/core/styles';
+
+const Backdrop = withStyles({
+  root: {
+    position: 'absolute',
+    zIndex: 1,
+  },
+})(BackdropMui);
 
 export const BackdropSpinner = ({ visible = false }) => {
   if (!visible) {
