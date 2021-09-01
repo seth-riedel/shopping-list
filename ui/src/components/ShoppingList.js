@@ -14,6 +14,7 @@ import {
   clearError,
   toggleAddItemDrawer,
 } from '../state/listSlice';
+import { setFormValues } from '../state/addItemSlice';
 
 export const ShoppingList = (props) => {
   const {
@@ -23,11 +24,12 @@ export const ShoppingList = (props) => {
     error,
     dispatchFetchListData,
     dispatchToggleAddItemDrawer,
+    dispatchSetFormValues,
   } = props;
 
   useEffect(() => {
     dispatchFetchListData();
-  }, []);
+  }, [dispatchFetchListData]);
 
   return (
     <Box my={ 4 }>
@@ -40,7 +42,14 @@ export const ShoppingList = (props) => {
         </Grid>
         <Grid item xs={ 4 }>
           <Box textAlign="right">
-            <Button variant="contained" color="primary" onClick={ dispatchToggleAddItemDrawer }>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={ () => {
+                dispatchSetFormValues({});
+                dispatchToggleAddItemDrawer();
+              } }
+            >
               Add Item
             </Button>
           </Box>
@@ -73,6 +82,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   dispatchFetchListData: () => dispatch(fetchListData()),
   dispatchClearError: () => dispatch(clearError()),
+  dispatchSetFormValues: (payload) => dispatch(setFormValues(payload)),
   dispatchToggleAddItemDrawer: () => dispatch(toggleAddItemDrawer()),
 });
 

@@ -1,4 +1,3 @@
-const createError = require('http-errors');
 const express = require('express');
 require('express-async-errors');
 const path = require('path');
@@ -20,12 +19,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 
 // error handler
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  console.error(err.stack)
   if (err.message === 'Validation failed') {
-    err.status = 400;
+    res.status(400);
+  } else {
+    res.status(err.status || 500);
   }
-  res.status(err.status || 500).end()
-})
+  res.end();
+});
 
 module.exports = app;

@@ -1,5 +1,5 @@
 const express = require('express');
-const { celebrate, Joi, errors, Segments } = require('celebrate');
+const { celebrate, Joi, Segments } = require('celebrate');
 const db = require('../lib/db');
 
 const router = express.Router();
@@ -43,13 +43,15 @@ const upsertItem = async (req, res) => {
 };
 
 router.post(
-  '/item', 
+  '/item',
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       id: Joi.number().optional().min(1).allow(null),
       name: Joi.string().required(),
       notes: Joi.string().optional().allow(null, ''),
-      quantity: Joi.number().optional().min(1).max(99).default(1),
+      quantity: Joi.number().optional().min(1).max(99)
+        .default(1),
+      completed: Joi.boolean().optional().allow(null),
     }),
   }),
   upsertItem,
@@ -61,7 +63,7 @@ router.get('/item', async (req, res) => {
 });
 
 router.post(
-  '/item/complete', 
+  '/item/complete',
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       id: Joi.number().required().min(1),

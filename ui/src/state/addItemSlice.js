@@ -32,6 +32,9 @@ export const addItemSlice = createSlice({
     setError(state, action) {
       state.error = action.payload;
     },
+    setFormValues(state, action) {
+      state.formValues = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -52,6 +55,7 @@ export const addItemSlice = createSlice({
 export const {
   clearError,
   setError,
+  setFormValues,
 } = addItemSlice.actions;
 
 export default addItemSlice.reducer;

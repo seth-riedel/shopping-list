@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
@@ -8,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { toggleAddItemDrawer } from '../state/listSlice';
-import { setError, saveItem } from '../state/addItemSlice';
+import { setError, saveItem, setFormValues } from '../state/addItemSlice';
 
 // @TODO: this should be standardized and also checked on the backend
 const formIsValid = (values) => {
@@ -24,17 +23,17 @@ export const AddItemDrawer = (props) => {
   const {
     error,
     isSaving,
+    formValues,
     addItemOpen,
     dispatchToggleAddItemDrawer,
     dispatchSetError,
     dispatchSaveItem,
+    dispatchSetFormValues,
   } = props;
 
-  const [formValues, setFormValues] = useState({});
-
-  // @TODO: should use a form library to handle this
+  // @TODO: should probably use a form library to handle this
   const handleInputChange = (event) => {
-    setFormValues({
+    dispatchSetFormValues({
       ...formValues,
       [event.target.name]: event.target.value,
     });
@@ -71,6 +70,7 @@ export const AddItemDrawer = (props) => {
             autoFocus
             required
             fullWidth
+            defaultValue={ formValues.name }
             onChange={ handleInputChange }
           />
         </Box>
@@ -83,6 +83,7 @@ export const AddItemDrawer = (props) => {
             rows={ 4 }
             multiline
             fullWidth
+            defaultValue={ formValues.notes }
             onChange={ handleInputChange }
           />
         </Box>
@@ -95,7 +96,7 @@ export const AddItemDrawer = (props) => {
             required
             fullWidth
             type="number"
-            defaultValue="1"
+            defaultValue={ formValues.quantity || 1 }
             onChange={ handleInputChange }
           />
         </Box>
@@ -127,12 +128,14 @@ const mapStateToProps = (state) => ({
   addItemOpen: state.list.addItemOpen,
   error: state.addItem.error,
   isSaving: state.addItem.isSaving,
+  formValues: state.addItem.formValues,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   dispatchToggleAddItemDrawer: () => dispatch(toggleAddItemDrawer()),
   dispatchSetError: (payload) => dispatch(setError(payload)),
   dispatchSaveItem: (payload) => dispatch(saveItem(payload)),
+  dispatchSetFormValues: (payload) => dispatch(setFormValues(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddItemDrawer);
